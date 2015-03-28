@@ -27,7 +27,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textField_length"
+                android:id="@+id/textField_roomLength"
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="25sp"
                 android:hint="@string/room_length"
@@ -37,7 +37,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textField_width"
+                android:id="@+id/textField_roomWidth"
                 android:textSize="25sp"
                 android:hint="@string/room_width"
                 android:textColor="@android:color/holo_blue_dark"
@@ -47,7 +47,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textField_height"
+                android:id="@+id/textField_roomHeight"
                 android:textSize="25sp"
                 android:hint="@string/room_height"
                 android:textColor="@android:color/holo_blue_dark"
@@ -58,20 +58,47 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/windows_number"
-                android:id="@+id/label_windowsNumber"
+                android:text="@string/enter_window_sizes"
+                android:id="@+id/label_enterWindowSizes"
                 android:layout_marginTop="15dp"
                 android:textSize="20sp" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textField_windowsNimber"
+                android:id="@+id/textField_windowLenfth"
                 android:textColor="@android:color/holo_blue_dark"
                 android:textSize="25sp"
+                android:hint="@string/room_length"
                 android:textColorHint="#ffb4b4b4"
-                android:inputType="number"
-                android:text="0" />
+                android:inputType="numberDecimal"
+                android:layout_gravity="center_horizontal" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textField_windowWidth"
+                android:textSize="25sp"
+                android:hint="@string/room_width"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textColorHint="#ffb4b4b4"
+                android:inputType="numberDecimal"
+                android:layout_gravity="center_horizontal" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_window"
+                android:id="@+id/button_addWindow"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/label_windows"
+                android:textSize="15sp"
+                android:lines="5" />
 
             <Button
                 android:layout_width="fill_parent"

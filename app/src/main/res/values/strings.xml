@@ -5,9 +5,10 @@
     <string name="room_length">Длина</string>
     <string name="room_width">Ширина</string>
     <string name="room_height">Высота</string>
-    <string name="windows_number">Количество окон/дверей:</string>
+    <string name="enter_window_sizes">Введите размеры проема (окно/дверь), м:</string>
 
     <string name="calculate">Рассчитать</string>
+    <string name="add_window">Добавить проем</string>
 
     <string name="title_out_activity">Результат</string>
 
