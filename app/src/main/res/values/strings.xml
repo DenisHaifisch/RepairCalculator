@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Repair Calculator</string>
+
+    <string name="enter_room_sizes">Введите размеры комнаты, м:</string>
+    <string name="room_length">Длина</string>
+    <string name="room_width">Ширина</string>
+    <string name="room_height">Высота</string>
+    <string name="windows_number">Количество окон/дверей:</string>
+
+    <string name="calculate">Рассчитать</string>
+
+    <string name="title_out_activity">Результат</string>
+
+    <string name="action_settings">Settings</string>
+</resources>

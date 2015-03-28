@@ -1,0 +1,87 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/enter_room_sizes"
+                android:id="@+id/label_enterRoomSizes"
+                android:textSize="20sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textField_length"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="25sp"
+                android:hint="@string/room_length"
+                android:textColorHint="#ffb4b4b4"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textField_width"
+                android:textSize="25sp"
+                android:hint="@string/room_width"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textColorHint="#ffb4b4b4"
+                android:inputType="numberDecimal" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textField_height"
+                android:textSize="25sp"
+                android:hint="@string/room_height"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textColorHint="#ffb4b4b4"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/windows_number"
+                android:id="@+id/label_windowsNumber"
+                android:layout_marginTop="15dp"
+                android:textSize="20sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textField_windowsNimber"
+                android:textColor="@android:color/holo_blue_dark"
+                android:textSize="25sp"
+                android:textColorHint="#ffb4b4b4"
+                android:inputType="number"
+                android:text="0" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calculate"
+                android:id="@+id/button_calculate"
+                android:layout_gravity="center_horizontal"
+                android:textSize="20sp"
+                android:layout_marginTop="15dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>
