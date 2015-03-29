@@ -15,17 +15,23 @@ import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
-    // переменные для хранения вычисленной площади пола/потолка, стен, комнаты, проемов
+    // переменные для хранения вычисленной площади пола/потолка, площади проемов, площади стен без проемов
     private Double areaFloor = 0.0;
-    private Double areaWall = 0.0;
-    private Double areaRoom = 0.0;
     private Double areaWindows = 0.0;
+    private Double areaWallWithoutWindows = 0.0;
+
+    // площадь 1 рулона обоев двух стандартных размеров - узкие 10.05х0.53 метров и широкие 10.05х1.06 метров
+    private final static Double NARROW_WALLPAPER = 5.3265;
+    private final static Double WIDE_WALLPAPER = 10.653;
+
+    // переменные для хранения количества рулонов обоев различной ширины для стен и потолка
+    private Double wallNarrowWallpaper = 0.0;
+    private Double wallWideWallpaper = 0.0;
+    private Double ceilingNarrowWallpaper = 0.0;
+    private Double ceilingWideWallpaper = 0.0;
 
     // счетчик вызовов метода windows
-    private Integer windowsCounter = 0;
-
-    // переменная для отображения проемов, начиная с первого
-    private Integer windowsCounterPlusOne = 0;
+    private Integer windowsCounter = -1;
 
     // массивы для хранения проемов и их размеров
     // массив для хранения проемов имеет вид:
@@ -37,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
     private ArrayList<Double> windowSizes = new ArrayList<>();
     private ArrayList<ArrayList<Double>> windows = new ArrayList<>();
 
-    // строковый массив для хранения размеров окон и вывода их на экран
+    // строковый массив для хранения списка проемов и вывода его на экран
     private ArrayList<String> windowsText = new ArrayList<>();
 
     @Override
@@ -45,9 +51,13 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // объявление ссылкок на объект кнопки и связывание ее с соответствующими элементами на экране устройства
+        // объявление ссылок на объект кнопки и связывание их с соответствующими элементами на экране устройства
         Button calculateButton = (Button) findViewById(R.id.button_calculate);
         Button addWindowButton = (Button) findViewById(R.id.button_addWindow);
+        Button clearWindowsListButton = (Button) findViewById(R.id.button_clearWindowsList);
+
+        // объявление ссылки на объект текстового поля со списком проемов и связывание ее с соответствующим элементом на экране устройства
+        final TextView textViewWindows = (TextView) findViewById(R.id.label_windows);
 
         // создание ссылки на объект типа Интент для перехода с главного экрана на экран вывода
         final Intent intent = new Intent(this, OutActivity.class);
@@ -58,17 +68,23 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
 
                 // вызов метода вычисления
-                calculateArea();
+                calculate();
 
                 // преобразование вычисленных значений в строки для передачи экрану вывода
                 String areaFloorString = areaFloor.toString();
-                String areaWallString = areaWall.toString();
-                String areaRoomString = areaRoom.toString();
+                String areaWallString = areaWallWithoutWindows.toString();
+                String wallNarrowWallpaperString = wallNarrowWallpaper.toString();
+                String wallWideWallpaperString = wallWideWallpaper.toString();
+                String ceilingNarrowWallpaperString = ceilingNarrowWallpaper.toString();
+                String ceilingWideWallpaperString = ceilingWideWallpaper.toString();
 
                 // передача с помощью Интента данных экрану вывода
                 intent.putExtra("areaFloor", areaFloorString);
                 intent.putExtra("areaWall", areaWallString);
-                intent.putExtra("areaRoom", areaRoomString);
+                intent.putExtra("wallNarrowWallpaper", wallNarrowWallpaperString);
+                intent.putExtra("wallWideWallpaper", wallWideWallpaperString);
+                intent.putExtra("ceilingNarrowWallpaper", ceilingNarrowWallpaperString);
+                intent.putExtra("ceilingWideWallpaper", ceilingWideWallpaperString);
 
                 // переход на экран вывода
                 startActivity(intent);
@@ -81,8 +97,26 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                // вызов метода вычисления площади проема и вывода его на экран
+                // вызов метода вычисления площади проема и вывода списка проемов на экран
                 calculateWindow();
+
+            }
+        };
+
+        // обработчик события - нажатие кнопки "Очистить список проемов"
+        View.OnClickListener clearWindowsListButtonListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // устанавливаем соответствующее сообщение и минимальный размер текстового поля для вывода списка проемов
+                textViewWindows.setHeight(50);
+                textViewWindows.setText(R.string.list_is_empty);
+
+                // очищаем массив для хранения списка проемов, сбрасываем счетчик вызовов функции calculateWindow
+                // и обнуляем переменную с суммарной площадью проемов
+                windowsText.clear();
+                windowsCounter = -1;
+                areaWindows = 0.0;
 
             }
         };
@@ -90,11 +124,14 @@ public class MainActivity extends ActionBarActivity {
         // связывание объекта и обработчика события
         calculateButton.setOnClickListener(calculateButtonListener);
         addWindowButton.setOnClickListener(addWindowButtonListener);
+        clearWindowsListButton.setOnClickListener(clearWindowsListButtonListener);
 
     }
 
-    // метод для вычисления площади комнаты
-    private void calculateArea () {
+    // основной метод для вычисления площади пола/потолка комнаты, общей площади стен, площади стен без проемов,
+    // необходимого количества рулонов обоев для стен и потолка
+    private void calculate () {
+
         // объявление ссылок на текстовые поля для ввода размеров комнаты, и связывание их с соответствующими элементами на экране устройства
         EditText roomLengthText = (EditText) findViewById(R.id.textField_roomLength);
         EditText roomWidthText = (EditText) findViewById(R.id.textField_roomWidth);
@@ -121,22 +158,41 @@ public class MainActivity extends ActionBarActivity {
             Double roomWidth = Double.parseDouble(roomWidthString);
             Double roomHeight = Double.parseDouble(roomHeightString);
 
-            // считаем общую площадь стен, площадь пола/потолка и площадь всей комнаты
-            areaWall = 2 * (roomLength * roomHeight + roomWidth * roomHeight);
+            // считаем площадь пола/потолка, общую площадь стен и площадь стен без проемов
             areaFloor = roomLength * roomWidth;
-            areaRoom = areaWall + 2 * areaFloor;
+            Double areaWall = 2 * (roomLength * roomHeight + roomWidth * roomHeight);
+            areaWallWithoutWindows = areaWall - areaWindows;
+
+            // считаем необходимое количество рулонов обоев различной ширины для стен и потолка
+            wallNarrowWallpaper = areaWallWithoutWindows / NARROW_WALLPAPER;
+            wallWideWallpaper = areaWallWithoutWindows / WIDE_WALLPAPER;
+            ceilingNarrowWallpaper = areaFloor / NARROW_WALLPAPER;
+            ceilingWideWallpaper = areaFloor / WIDE_WALLPAPER;
+
+            // округляем необходимое количество рулонов обоев до одного знака после запятой
+            wallNarrowWallpaper = roundWallpaper(wallNarrowWallpaper);
+            wallWideWallpaper = roundWallpaper(wallWideWallpaper);
+            ceilingNarrowWallpaper = roundWallpaper(ceilingNarrowWallpaper);
+            ceilingWideWallpaper = roundWallpaper(ceilingWideWallpaper);
+
         }
 
     }
 
-    // метод для вычисления площади проемов и вывода их на экран
+    // метод для вычисления площади проемов и вывода списка проемов на экран
     private void calculateWindow () {
+
+        // наращивание счетчика вызовов метода
+        windowsCounter++;
+
+        // увеличение счетчика вызовов метода на единицу, чтобы список проемов начинался с первого элемента, а не с нулевого
+        Integer windowsCounterPlusOne = windowsCounter + 1;
 
         // объявление ссылок на текстовые поля для ввода размеров проемов, и связывание их с соответствующими элементами на экране устройства
         EditText windowLengthText = (EditText) findViewById(R.id.textField_windowLenfth);
         EditText windowWidthText = (EditText) findViewById(R.id.textField_windowWidth);
 
-        // объявление ссылки на объект текстового поля с проемами и связывание ее с соответствующим элементом на экране устройства
+        // объявление ссылки на объект текстового поля со списком проемов и связывание ее с соответствующим элементом на экране устройства
         TextView textViewWindows = (TextView) findViewById(R.id.label_windows);
 
         // последовательность символов, полученная из текстовых полей
@@ -171,16 +227,15 @@ public class MainActivity extends ActionBarActivity {
             // добавление массива размеров проемов в массив проемов
             windows.add(windowsCounter, windowSizes);
 
-            // чтобы список проемов начинался с первого
-            windowsCounterPlusOne = windowsCounter + 1;
+            // добавление в текстовый массив размеров проемов строки вида "Проем # - ДлинаПроема х ШиринаПроема"
+            windowsText.add("Проем " + windowsCounterPlusOne + " - " + windowLengthString + "x" + windowWidthString + "\n");
 
             // установка количества линий и размера текстового поля для вывода списка проемов
-            textViewWindows.setLines(windowsCounterPlusOne);
+            // для вывода каждого проема требуется по 2 линии и по 50 пикселей
+            textViewWindows.setLines(windowsCounterPlusOne * 2);
+            textViewWindows.setHeight(windowsCounterPlusOne * 50);
 
-            // добавление в текстовый массив размеров проемов строки вида "Проем # ДлинаПроема х ШиринаПроема"
-            windowsText.add(windowsCounter, "Проем " + windowsCounterPlusOne + " " + windowLength + "x" + windowWidth + "\n");
-
-            // Строковая переменная для вывода проемов на экран
+            // Строковая переменная для вывода списка проемов на экран
             String windows = "";
 
             // Формирование строки со всеми проемами. Каждый проем на новой строке
@@ -189,17 +244,23 @@ public class MainActivity extends ActionBarActivity {
                 windows += windowsText.get(i) + "\n";
             }
 
-            // вывод проемов на экран
+            // вывод списка проемов на экран
             textViewWindows.setText(windows);
 
             // Очистка полей для ввода размеров проемов
             windowLengthText.setText("");
             windowWidthText.setText("");
 
-            // наращивание счетчика вызовов метода
-            windowsCounter++;
-
         }
+
+    }
+
+    // метод для округления необходимого количества рулонов обоев до 1 знака после запятой
+    double roundWallpaper (double wallpaper) {
+
+        wallpaper = wallpaper * 10;
+        int i = (int) Math.round(wallpaper);
+        return (double) i / 10;
 
     }
 

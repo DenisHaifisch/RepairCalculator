@@ -18,12 +18,25 @@ public class OutActivity extends ActionBarActivity {
         Intent intent = getIntent();
 
         // ссылки на объекты, в которые будет производиться вывод рассчитанной информации
-        TextView outAreaText = (TextView) findViewById(R.id.label_outArea);
+        TextView outWallMaterials = (TextView) findViewById(R.id.label_outWall);
+        TextView outCeilingMaterials = (TextView) findViewById(R.id.label_outCeiling);
+        TextView outFloorMaterials = (TextView) findViewById(R.id.label_outFloor);
 
-        // формирование текста с информацией о площадях комнаты с данными, полученными от главного экрана
-        outAreaText.setText("Общая площадь комнаты - " + intent.getStringExtra("areaRoom") + " кв. метров \n" +
-                            "Площадь пола/потолка - " + intent.getStringExtra("areaFloor") + " кв. метров \n" +
-                            "Площадь стен - " + intent.getStringExtra("areaWall") + " кв. метров");
+        // формирование текста с информацией о количестве рулонов обоев различной толщины, необходимом для оклейки стен
+        outWallMaterials.setText("Для оклейки стен площадью " + intent.getStringExtra("areaWall") +
+                                 " кв. метров Вам понадобится " + intent.getStringExtra("wallNarrowWallpaper") +
+                                 " рулонов обоев шириной 0.53 метра. Или " + intent.getStringExtra("wallWideWallpaper") +
+                                 " рулонов обоев шириной 1.06 метра.");
+
+        // формирование текста с информацией о количестве рулонов обоев различной толщины, необходимом для оклейки потолка
+        outCeilingMaterials.setText("Для оклейки потолка площадью " + intent.getStringExtra("areaFloor") +
+                                    " кв. метров Вам понадобится " + intent.getStringExtra("ceilingNarrowWallpaper") +
+                                    " рулонов обоев шириной 0.53 метра. Или " + intent.getStringExtra("ceilingWideWallpaper") +
+                                    " рулонов обоев шириной 1.06 метра.");
+
+        // формирование текста с информацией о количестве материала, необходимом для покрытия пола
+        outFloorMaterials.setText("Для покрытия пола Вам понадобится " + intent.getStringExtra("areaFloor") +
+                                  " кв. метров материала.");
 
     }
 
