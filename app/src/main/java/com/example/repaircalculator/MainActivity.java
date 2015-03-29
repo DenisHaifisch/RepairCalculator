@@ -1,6 +1,7 @@
 package com.example.repaircalculator;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -67,27 +68,40 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                // вызов метода вычисления
-                calculate();
+                // вызов метода вычисления, если вычисления прошли удачно
+                if (calculate()) {
 
-                // преобразование вычисленных значений в строки для передачи экрану вывода
-                String areaFloorString = areaFloor.toString();
-                String areaWallString = areaWallWithoutWindows.toString();
-                String wallNarrowWallpaperString = wallNarrowWallpaper.toString();
-                String wallWideWallpaperString = wallWideWallpaper.toString();
-                String ceilingNarrowWallpaperString = ceilingNarrowWallpaper.toString();
-                String ceilingWideWallpaperString = ceilingWideWallpaper.toString();
+                    // проверка, что не получились нулевые или отрицательные площади стен или пола/потолка
+                    if ((areaFloor <= 0) || (areaWallWithoutWindows <= 0)) {
 
-                // передача с помощью Интента данных экрану вывода
-                intent.putExtra("areaFloor", areaFloorString);
-                intent.putExtra("areaWall", areaWallString);
-                intent.putExtra("wallNarrowWallpaper", wallNarrowWallpaperString);
-                intent.putExtra("wallWideWallpaper", wallWideWallpaperString);
-                intent.putExtra("ceilingNarrowWallpaper", ceilingNarrowWallpaperString);
-                intent.putExtra("ceilingWideWallpaper", ceilingWideWallpaperString);
+                        intent.putExtra("positiveResult", false);
 
-                // переход на экран вывода
-                startActivity(intent);
+                        // переход на экран вывода
+                        startActivity(intent);
+
+                    } else {
+
+                        // преобразование вычисленных значений в строки для передачи экрану вывода
+                        String areaFloorString = areaFloor.toString();
+                        String areaWallString = areaWallWithoutWindows.toString();
+                        String wallNarrowWallpaperString = wallNarrowWallpaper.toString();
+                        String wallWideWallpaperString = wallWideWallpaper.toString();
+                        String ceilingNarrowWallpaperString = ceilingNarrowWallpaper.toString();
+                        String ceilingWideWallpaperString = ceilingWideWallpaper.toString();
+
+                        // передача с помощью Интента данных экрану вывода
+                        intent.putExtra("positiveResult", true);
+                        intent.putExtra("areaFloor", areaFloorString);
+                        intent.putExtra("areaWall", areaWallString);
+                        intent.putExtra("wallNarrowWallpaper", wallNarrowWallpaperString);
+                        intent.putExtra("wallWideWallpaper", wallWideWallpaperString);
+                        intent.putExtra("ceilingNarrowWallpaper", ceilingNarrowWallpaperString);
+                        intent.putExtra("ceilingWideWallpaper", ceilingWideWallpaperString);
+
+                        // переход на экран вывода
+                        startActivity(intent);
+                    }
+                }
 
             }
         };
@@ -130,12 +144,15 @@ public class MainActivity extends ActionBarActivity {
 
     // основной метод для вычисления площади пола/потолка комнаты, общей площади стен, площади стен без проемов,
     // необходимого количества рулонов обоев для стен и потолка
-    private void calculate () {
+    private boolean calculate () {
 
         // объявление ссылок на текстовые поля для ввода размеров комнаты, и связывание их с соответствующими элементами на экране устройства
         EditText roomLengthText = (EditText) findViewById(R.id.textField_roomLength);
         EditText roomWidthText = (EditText) findViewById(R.id.textField_roomWidth);
         EditText roomHeightText = (EditText) findViewById(R.id.textField_roomHeight);
+
+        // текстовое поле для сообщений об ошибках
+        TextView errorText = (TextView) findViewById(R.id.label_error);
 
         // последовательность символов, полученная из текстовых полей
         CharSequence roomLengthSequence = roomLengthText.getText();
@@ -148,10 +165,30 @@ public class MainActivity extends ActionBarActivity {
         String roomHeightString = roomHeightSequence.toString();
 
         // проверка, что поля для ввода не пустые
-        if (roomLengthString.equals("") || roomWidthString.equals("") || roomHeightString.equals("")) {
+        // если поле для ввода какого-либо размера комнаты пустое, выводим соответствующее сообщение в поле для ошибок
+        if (roomLengthString.equals("")) {
 
-            // добавить действия при отсутсвии данных
+            errorText.setText(R.string.enter_length);
+            errorText.setHeight(50);
+            return false;
+
+        } else if (roomWidthString.equals("")) {
+
+            errorText.setText(R.string.enter_width);
+            errorText.setHeight(50);
+            return false;
+
+        } else if (roomHeightString.equals("")) {
+
+            errorText.setText(R.string.enter_height);
+            errorText.setHeight(50);
+            return false;
+
         } else {
+
+            // очищаем поле для вывода сообщения об ошибке
+            errorText.setText("");
+            errorText.setHeight(0);
 
             // числовые переменные, преобразованные из строк
             Double roomLength = Double.parseDouble(roomLengthString);
@@ -175,18 +212,14 @@ public class MainActivity extends ActionBarActivity {
             ceilingNarrowWallpaper = roundWallpaper(ceilingNarrowWallpaper);
             ceilingWideWallpaper = roundWallpaper(ceilingWideWallpaper);
 
+            return true;
+
         }
 
     }
 
     // метод для вычисления площади проемов и вывода списка проемов на экран
     private void calculateWindow () {
-
-        // наращивание счетчика вызовов метода
-        windowsCounter++;
-
-        // увеличение счетчика вызовов метода на единицу, чтобы список проемов начинался с первого элемента, а не с нулевого
-        Integer windowsCounterPlusOne = windowsCounter + 1;
 
         // объявление ссылок на текстовые поля для ввода размеров проемов, и связывание их с соответствующими элементами на экране устройства
         EditText windowLengthText = (EditText) findViewById(R.id.textField_windowLenfth);
@@ -204,10 +237,13 @@ public class MainActivity extends ActionBarActivity {
         String windowWidthString = windowWidthSequence.toString();
 
         // проверка, что поля для ввода не пустые
-        if (windowLengthString.equals("") || windowWidthString.equals("")) {
+        if ( !(windowLengthString.isEmpty()) && !(windowWidthString.isEmpty())) {
 
-            // добавить действия при отсутсвии данных
-        } else {
+            // наращивание счетчика вызовов метода
+            windowsCounter++;
+
+            // увеличение счетчика вызовов метода на единицу, чтобы список проемов начинался с первого элемента, а не с нулевого
+            Integer windowsCounterPlusOne = windowsCounter + 1;
 
             // числовые переменные, преобразованные из строк
             Double windowLength = Double.parseDouble(windowLengthString);
@@ -239,8 +275,7 @@ public class MainActivity extends ActionBarActivity {
             String windows = "";
 
             // Формирование строки со всеми проемами. Каждый проем на новой строке
-            for (int i = 0; i < windowsText.size(); i++)
-            {
+            for (int i = 0; i < windowsText.size(); i++) {
                 windows += windowsText.get(i) + "\n";
             }
 
@@ -250,7 +285,6 @@ public class MainActivity extends ActionBarActivity {
             // Очистка полей для ввода размеров проемов
             windowLengthText.setText("");
             windowWidthText.setText("");
-
         }
 
     }

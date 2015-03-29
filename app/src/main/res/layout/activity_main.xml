@@ -125,8 +125,18 @@
                 android:id="@+id/button_calculate"
                 android:layout_gravity="center_horizontal"
                 android:textSize="17sp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginTop="15dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/label_error"
+                android:textSize="20sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_marginBottom="10dp"
+                android:height="0dp"
+                android:layout_marginLeft="3dp" />
 
         </LinearLayout>
     </ScrollView>

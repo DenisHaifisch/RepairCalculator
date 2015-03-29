@@ -8,6 +8,9 @@
     <string name="enter_window_sizes">Введите размеры проема (окно/дверь), м:</string>
     <string name="windows_list">Список проемов:</string>
     <string name="list_is_empty">Список пуст</string>
+    <string name="enter_length">Длина комнаты не введена</string>
+    <string name="enter_width">Ширина комнаты не введена</string>
+    <string name="enter_height">Высота комнаты не введена</string>
 
     <string name="calculate">Рассчитать</string>
     <string name="add_window">Добавить проем</string>
