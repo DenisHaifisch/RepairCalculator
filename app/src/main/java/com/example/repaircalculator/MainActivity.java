@@ -1,7 +1,6 @@
 package com.example.repaircalculator;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -83,7 +82,6 @@ public class MainActivity extends ActionBarActivity {
 
                         // преобразование вычисленных значений в строки для передачи экрану вывода
                         String areaFloorString = areaFloor.toString();
-                        String areaWallString = areaWallWithoutWindows.toString();
                         String wallNarrowWallpaperString = wallNarrowWallpaper.toString();
                         String wallWideWallpaperString = wallWideWallpaper.toString();
                         String ceilingNarrowWallpaperString = ceilingNarrowWallpaper.toString();
@@ -92,7 +90,6 @@ public class MainActivity extends ActionBarActivity {
                         // передача с помощью Интента данных экрану вывода
                         intent.putExtra("positiveResult", true);
                         intent.putExtra("areaFloor", areaFloorString);
-                        intent.putExtra("areaWall", areaWallString);
                         intent.putExtra("wallNarrowWallpaper", wallNarrowWallpaperString);
                         intent.putExtra("wallWideWallpaper", wallWideWallpaperString);
                         intent.putExtra("ceilingNarrowWallpaper", ceilingNarrowWallpaperString);
@@ -207,10 +204,10 @@ public class MainActivity extends ActionBarActivity {
             ceilingWideWallpaper = areaFloor / WIDE_WALLPAPER;
 
             // округляем необходимое количество рулонов обоев до одного знака после запятой
-            wallNarrowWallpaper = roundWallpaper(wallNarrowWallpaper);
-            wallWideWallpaper = roundWallpaper(wallWideWallpaper);
-            ceilingNarrowWallpaper = roundWallpaper(ceilingNarrowWallpaper);
-            ceilingWideWallpaper = roundWallpaper(ceilingWideWallpaper);
+            wallNarrowWallpaper = RoundDecimal.roundDouble (wallNarrowWallpaper, 2);
+            wallWideWallpaper = RoundDecimal.roundDouble (wallWideWallpaper, 2);
+            ceilingNarrowWallpaper = RoundDecimal.roundDouble (ceilingNarrowWallpaper, 2);
+            ceilingWideWallpaper = RoundDecimal.roundDouble (ceilingWideWallpaper, 2);
 
             return true;
 
@@ -289,14 +286,6 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    // метод для округления необходимого количества рулонов обоев до 1 знака после запятой
-    double roundWallpaper (double wallpaper) {
-
-        wallpaper = wallpaper * 10;
-        int i = (int) Math.round(wallpaper);
-        return (double) i / 10;
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

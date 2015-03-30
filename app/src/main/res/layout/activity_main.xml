@@ -108,7 +108,8 @@
                 android:id="@+id/label_windows"
                 android:textSize="15sp"
                 android:text="@string/list_is_empty"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="5dp"
+                android:height="50dp" />
 
             <Button
                 android:layout_width="fill_parent"
