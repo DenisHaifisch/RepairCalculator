@@ -1,6 +1,11 @@
 package com.example.repaircalculator;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,8 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -63,7 +70,7 @@ public class MainActivity extends ActionBarActivity {
         final Intent intent = new Intent(this, OutActivity.class);
 
         // обработчик события - нажатие кнопки "Рассчитать"
-        View.OnClickListener calculateButtonListener = new View.OnClickListener() {
+        calculateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -101,21 +108,71 @@ public class MainActivity extends ActionBarActivity {
                 }
 
             }
-        };
+        });
 
-        // обработчик события - нажатие кнопки "Добавить проем"
-        View.OnClickListener addWindowButtonListener = new View.OnClickListener() {
+        // обработчик события - нажатие кнопки "Добавить"
+        addWindowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final Context context = v.getContext();
 
-                // вызов метода вычисления площади проема и вывода списка проемов на экран
-                calculateWindow();
+                // создание диалога для ввода размеров комнаты
+                AlertDialog.Builder dialogWindowSizes = new AlertDialog.Builder(v.getContext());
+
+                // создание двух текстовых полей для ввода размеров проема и лэйаута для их объединения и помещения в диалог
+                final EditText enterWindowLength = new EditText(context);
+                final EditText enterWindowWidth = new EditText(context);
+                final LinearLayout windowLayout = new LinearLayout(context);
+
+                // установка параметров текстовых полей
+                enterWindowLength.setHint(R.string.room_length);
+                enterWindowWidth.setHint(R.string.room_width);
+                enterWindowLength.setTextSize(20.0f);
+                enterWindowWidth.setTextSize(20.0f);
+
+                // добавление текстовых полей на лейаут и установка ориентации лейаута
+                windowLayout.setOrientation(LinearLayout.VERTICAL);
+                windowLayout.addView(enterWindowLength);
+                windowLayout.addView(enterWindowWidth);
+
+                // обработчик нажатий на кнопки диалога
+                DialogInterface.OnClickListener dialogWindowSizesListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        // если нажата кнопка диалога "Добавить"
+                        if (which == AlertDialog.BUTTON_POSITIVE) {
+
+                            //считываем из полей ввода последовательность символов
+                            CharSequence windowLengthSequence = enterWindowLength.getText();
+                            CharSequence windowWidthSequence = enterWindowWidth.getText();
+
+                            // строки, преобразованные из последовательности символов
+                            String windowLengthString = windowLengthSequence.toString();
+                            String windowWidthString = windowWidthSequence.toString();
+
+                            // вызов метода вычисления площади проема и передача ему строковых переменных с размерами проема
+                            calculateWindow(windowLengthString, windowWidthString);
+
+                        }
+
+                    }
+                };
+
+                // установка параметров диалога - заголовок, сообщение, лейаут с 2 полями для ввода и 2 кнопки
+                dialogWindowSizes.setTitle(R.string.window_dialog_title)
+                        .setMessage(R.string.window_dialog_message)
+                        .setView(windowLayout)
+                        .setPositiveButton(R.string.window_positive_button, dialogWindowSizesListener)
+                        .setNegativeButton(R.string.window_negative_button, dialogWindowSizesListener);
+
+                dialogWindowSizes.show();
 
             }
-        };
+        });
 
-        // обработчик события - нажатие кнопки "Очистить список проемов"
-        View.OnClickListener clearWindowsListButtonListener = new View.OnClickListener() {
+        // обработчик события - нажатие кнопки "Очистить"
+        clearWindowsListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -130,12 +187,8 @@ public class MainActivity extends ActionBarActivity {
                 areaWindows = 0.0;
 
             }
-        };
+        });
 
-        // связывание объекта и обработчика события
-        calculateButton.setOnClickListener(calculateButtonListener);
-        addWindowButton.setOnClickListener(addWindowButtonListener);
-        clearWindowsListButton.setOnClickListener(clearWindowsListButtonListener);
 
     }
 
@@ -216,22 +269,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     // метод для вычисления площади проемов и вывода списка проемов на экран
-    private void calculateWindow () {
-
-        // объявление ссылок на текстовые поля для ввода размеров проемов, и связывание их с соответствующими элементами на экране устройства
-        EditText windowLengthText = (EditText) findViewById(R.id.textField_windowLenfth);
-        EditText windowWidthText = (EditText) findViewById(R.id.textField_windowWidth);
+    // входные параметры - указатели на объекты типа String с длиной и шириной проема
+    private void calculateWindow (String windowLengthString, String windowWidthString) {
 
         // объявление ссылки на объект текстового поля со списком проемов и связывание ее с соответствующим элементом на экране устройства
         TextView textViewWindows = (TextView) findViewById(R.id.label_windows);
-
-        // последовательность символов, полученная из текстовых полей
-        CharSequence windowLengthSequence = windowLengthText.getText();
-        CharSequence windowWidthSequence = windowWidthText.getText();
-
-        // строки, преобразованные из последовательности символов
-        String windowLengthString = windowLengthSequence.toString();
-        String windowWidthString = windowWidthSequence.toString();
 
         // проверка, что поля для ввода не пустые
         if ( !(windowLengthString.isEmpty()) && !(windowWidthString.isEmpty())) {
@@ -279,9 +321,6 @@ public class MainActivity extends ActionBarActivity {
             // вывод списка проемов на экран
             textViewWindows.setText(windows);
 
-            // Очистка полей для ввода размеров проемов
-            windowLengthText.setText("");
-            windowWidthText.setText("");
         }
 
     }

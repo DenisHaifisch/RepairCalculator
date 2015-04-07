@@ -12,7 +12,7 @@ public class RoundDecimal {
             digit = 10 ^ digit;
             value = value * digit;
             int i = (int) Math.round(value);
-            return (double) i / digit;
+            return ((double)i / (double)digit);
 
         }
 

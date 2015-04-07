@@ -5,16 +5,20 @@
     <string name="room_length">Длина</string>
     <string name="room_width">Ширина</string>
     <string name="room_height">Высота</string>
-    <string name="enter_window_sizes">Введите размеры проема (окно/дверь), м:</string>
-    <string name="windows_list">Список проемов:</string>
+    <string name="windows_list">Список проемов (окна/двери):</string>
     <string name="list_is_empty">Список пуст</string>
     <string name="enter_length">Длина комнаты не введена</string>
     <string name="enter_width">Ширина комнаты не введена</string>
     <string name="enter_height">Высота комнаты не введена</string>
 
     <string name="calculate">Рассчитать</string>
-    <string name="add_window">Добавить проем</string>
-    <string name="clear_windows_list">Очистить список проемов</string>
+    <string name="add_window">Добавить</string>
+    <string name="clear_windows_list">Очистить</string>
+
+    <string name="window_dialog_title">Добавить проем</string>
+    <string name="window_dialog_message">Введите размеры проема, м:</string>
+    <string name="window_positive_button">Добавить</string>
+    <string name="window_negative_button">Отменить</string>
 
     <string name="title_out_activity">Результат</string>
 
