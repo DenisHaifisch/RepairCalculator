@@ -28,11 +28,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/textField_roomLength"
-                android:textColor="@android:color/holo_blue_dark"
                 android:textSize="25sp"
                 android:hint="@string/room_length"
-                android:textColorHint="#ffb4b4b4"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:textColor="#ff3931ff"
+                android:textColorHint="#dbcdcdcd" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -40,9 +40,9 @@
                 android:id="@+id/textField_roomWidth"
                 android:textSize="25sp"
                 android:hint="@string/room_width"
-                android:textColor="@android:color/holo_blue_dark"
-                android:textColorHint="#ffb4b4b4"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:textColor="#ff3931ff"
+                android:textColorHint="#dbcdcdcd" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -50,9 +50,9 @@
                 android:id="@+id/textField_roomHeight"
                 android:textSize="25sp"
                 android:hint="@string/room_height"
-                android:textColor="@android:color/holo_blue_dark"
-                android:textColorHint="#ffb4b4b4"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:textColor="#ff3931ff"
+                android:textColorHint="#dbcdcdcd" />
 
             <TextView
                 android:layout_width="wrap_content"

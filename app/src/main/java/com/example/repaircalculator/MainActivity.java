@@ -4,10 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,7 +16,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 
@@ -57,6 +56,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // создание экземпляра базы данных материалов
+        DBMaterials dbMaterials = new DBMaterials(this);
 
         // объявление ссылок на объект кнопки и связывание их с соответствующими элементами на экране устройства
         Button calculateButton = (Button) findViewById(R.id.button_calculate);
@@ -124,11 +126,17 @@ public class MainActivity extends ActionBarActivity {
                 final EditText enterWindowWidth = new EditText(context);
                 final LinearLayout windowLayout = new LinearLayout(context);
 
-                // установка параметров текстовых полей
+                // установка параметров текстовых полей - текст подсказки, размер и цвет текста, тип вводимых данных
                 enterWindowLength.setHint(R.string.room_length);
                 enterWindowWidth.setHint(R.string.room_width);
-                enterWindowLength.setTextSize(20.0f);
-                enterWindowWidth.setTextSize(20.0f);
+                enterWindowLength.setTextSize(25.0f);
+                enterWindowWidth.setTextSize(25.0f);
+                enterWindowLength.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                enterWindowWidth.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                enterWindowLength.setTextColor(Color.BLUE);
+                enterWindowWidth.setTextColor(Color.BLUE);
+                enterWindowLength.setHintTextColor(Color.LTGRAY);
+                enterWindowWidth.setHintTextColor(Color.LTGRAY);
 
                 // добавление текстовых полей на лейаут и установка ориентации лейаута
                 windowLayout.setOrientation(LinearLayout.VERTICAL);
