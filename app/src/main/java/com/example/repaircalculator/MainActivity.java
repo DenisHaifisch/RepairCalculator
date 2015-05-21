@@ -31,10 +31,10 @@ public class MainActivity extends ActionBarActivity {
     private final static Double WIDE_WALLPAPER = 10.653;
 
     // переменные для хранения количества рулонов обоев различной ширины для стен и потолка
-    private Double wallNarrowWallpaper = 0.0;
-    private Double wallWideWallpaper = 0.0;
-    private Double ceilingNarrowWallpaper = 0.0;
-    private Double ceilingWideWallpaper = 0.0;
+    private Long wallNarrowWallpaper = 0l;
+    private Long wallWideWallpaper = 0l;
+    private Long ceilingNarrowWallpaper = 0l;
+    private Long ceilingWideWallpaper = 0l;
 
     // счетчик вызовов метода windows
     private Integer windowsCounter = -1;
@@ -57,9 +57,6 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // создание экземпляра базы данных материалов
-        DBMaterials dbMaterials = new DBMaterials(this);
-
         // объявление ссылок на объект кнопки и связывание их с соответствующими элементами на экране устройства
         Button calculateButton = (Button) findViewById(R.id.button_calculate);
         Button addWindowButton = (Button) findViewById(R.id.button_addWindow);
@@ -76,7 +73,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                // вызов метода вычисления, если вычисления прошли удачно
+                // проверка, что вычисления прошли удачно
                 if (calculate()) {
 
                     // проверка, что не получились нулевые или отрицательные площади стен или пола/потолка
@@ -98,7 +95,7 @@ public class MainActivity extends ActionBarActivity {
 
                         // передача с помощью Интента данных экрану вывода
                         intent.putExtra("positiveResult", true);
-                        intent.putExtra("areaFloor", areaFloorString);
+                        intent.putExtra("areaFloor", areaFloor);
                         intent.putExtra("wallNarrowWallpaper", wallNarrowWallpaperString);
                         intent.putExtra("wallWideWallpaper", wallWideWallpaperString);
                         intent.putExtra("ceilingNarrowWallpaper", ceilingNarrowWallpaperString);
@@ -259,16 +256,16 @@ public class MainActivity extends ActionBarActivity {
             areaWallWithoutWindows = areaWall - areaWindows;
 
             // считаем необходимое количество рулонов обоев различной ширины для стен и потолка
-            wallNarrowWallpaper = areaWallWithoutWindows / NARROW_WALLPAPER;
-            wallWideWallpaper = areaWallWithoutWindows / WIDE_WALLPAPER;
-            ceilingNarrowWallpaper = areaFloor / NARROW_WALLPAPER;
-            ceilingWideWallpaper = areaFloor / WIDE_WALLPAPER;
+            Double wallNarrowWallpaperDouble = areaWallWithoutWindows / NARROW_WALLPAPER;
+            Double wallWideWallpaperDouble = areaWallWithoutWindows / WIDE_WALLPAPER;
+            Double ceilingNarrowWallpaperDouble = areaFloor / NARROW_WALLPAPER;
+            Double ceilingWideWallpaperDouble = areaFloor / WIDE_WALLPAPER;
 
-            // округляем необходимое количество рулонов обоев до одного знака после запятой
-            wallNarrowWallpaper = RoundDecimal.roundDouble (wallNarrowWallpaper, 2);
-            wallWideWallpaper = RoundDecimal.roundDouble (wallWideWallpaper, 2);
-            ceilingNarrowWallpaper = RoundDecimal.roundDouble (ceilingNarrowWallpaper, 2);
-            ceilingWideWallpaper = RoundDecimal.roundDouble (ceilingWideWallpaper, 2);
+            // округляем необходимое количество рулонов до целого
+            wallNarrowWallpaper = Math.round(wallNarrowWallpaperDouble) + 1;
+            wallWideWallpaper = Math.round(wallWideWallpaperDouble) + 1;
+            ceilingNarrowWallpaper = Math.round(ceilingNarrowWallpaperDouble) + 1;
+            ceilingWideWallpaper = Math.round(ceilingWideWallpaperDouble) + 1;
 
             return true;
 

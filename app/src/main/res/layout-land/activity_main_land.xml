@@ -1,0 +1,122 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:paddingRight="10dp"
+    tools:context=".MainActivity"
+    android:paddingLeft="10dp">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/enter_room_sizes"
+                android:id="@+id/label_enterRoomSizes"
+                android:textSize="25sp"
+                android:layout_marginTop="10dp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textField_roomLength"
+                android:textSize="30sp"
+                android:hint="@string/room_length"
+                android:inputType="numberDecimal"
+                android:textColor="#ff3931ff"
+                android:textColorHint="#dbcdcdcd" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textField_roomWidth"
+                android:textSize="30sp"
+                android:hint="@string/room_width"
+                android:inputType="numberDecimal"
+                android:textColor="#ff3931ff"
+                android:textColorHint="#dbcdcdcd" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textField_roomHeight"
+                android:textSize="30sp"
+                android:hint="@string/room_height"
+                android:inputType="numberDecimal"
+                android:textColor="#ff3931ff"
+                android:textColorHint="#dbcdcdcd" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/windows_list"
+                android:id="@+id/label_listWindows"
+                android:textSize="25sp"
+                android:layout_marginTop="15dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/label_windows"
+                android:textSize="20sp"
+                android:text="@string/list_is_empty"
+                android:layout_marginTop="5dp"
+                android:height="50dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="50dp">
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_window"
+                    android:id="@+id/button_addWindow"
+                    android:textSize="22sp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clear_windows_list"
+                    android:id="@+id/button_clearWindowsList"
+                    android:textSize="22sp"
+                    android:layout_weight="1" />
+
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/calculate"
+                android:id="@+id/button_calculate"
+                android:layout_gravity="center_horizontal"
+                android:textSize="22sp"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/label_error"
+                android:textSize="25sp"
+                android:textColor="@android:color/holo_red_dark"
+                android:layout_marginBottom="10dp"
+                android:height="0dp"
+                android:layout_marginLeft="3dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

@@ -36,8 +36,8 @@ public class OutActivity extends ActionBarActivity {
                     " рулонов обоев шириной 1.06 метра.");
 
             // формирование текста с информацией о количестве материала, необходимом для покрытия пола
-            outFloorMaterials.setText("Для покрытия пола Вам понадобится " + intent.getStringExtra("areaFloor") +
-                    " кв. метров материала.");
+            outFloorMaterials.setText(String.format("Для покрытия пола Вам понадобится %.2f кв. метров материала.",
+                                                     intent.getDoubleExtra("areaFloor", 0.0)));
         } else {
 
             // формирование сообщения о некорректности введенных данных
